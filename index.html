@@ -255,6 +255,26 @@ h6 {
     margin: 0 0 20px 0;
 }
 
+#notification {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    font-size: 15px;
+    font-weight: 500;
+    z-index: 2000;
+    transition: top 0.3s ease;
+}
+
+#notification.show {
+    top: 24px;
+}
+
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
     body {
@@ -322,6 +342,15 @@ h6 {
     #cartWidget.open {
         right: 0;
     }
+
+    #notification {
+        font-size: 14px;
+        padding: 12px 20px;
+    }
+
+    #notification.show {
+        top: 16px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -372,6 +401,8 @@ h6 {
 </head>
 <body>
 
+<div id="notification">✓ Zum Warenkorb hinzugefügt</div>
+
 <div class="header-container">
   <header>BlopperShop</header>
   <button id="filterButton" onclick="toggleFilter()">Filter</button>
@@ -415,8 +446,18 @@ h6 {
 const cart = [];
 let currentFilter = 'all';
 
+function showNotification() {
+    const notif = document.getElementById("notification");
+    notif.classList.add('show');
+    
+    setTimeout(() => {
+        notif.classList.remove('show');
+    }, 2000);
+}
+
 function addToCart(product, cost) {
     cart.push({ product, cost });
+    showNotification();
 }
 
 function toggleFilter() {
@@ -692,7 +733,7 @@ renderProducts();
 <h4>© Blopperbold GMBH und Co.KG. Alle Rechte vorbehalten.</h4>
 <h5>Diese Seite ist nur eine Überleitungsstelle, keine Bestellungen werden von uns gehandelt.</h5>
 <h6>Der Verkauf von Snus an Personen unter 18 Jahren ist verboten. Bitte kaufe und konsumiere verantwortungsbewusst.</h6>
-<h6>Update 1.5</h6>
+<h6>Update 1.6</h6>
 </div>
 </body>
 </html>
