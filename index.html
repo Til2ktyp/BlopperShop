@@ -89,16 +89,20 @@ h6 {
 #cartWidget {
     position: fixed;
     top: 0;
-    right: -340px;
+    right: -100%;
     width: 320px;
     height: 100%;
     background: #fff;
     border-left: 1px solid #e5e7eb;
     padding: 16px;
-    transition: 0.3s;
+    transition: right 0.3s ease;
     overflow-y: auto;
     box-shadow: -10px 0 30px rgba(0,0,0,0.08);
     z-index: 1000;
+}
+
+#cartWidget.open {
+    right: 0;
 }
 
 #cartWidget h3 {
@@ -136,7 +140,7 @@ h6 {
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
     body {
-        padding: 16px;
+        padding: 12px;
         padding-bottom: 80px;
     }
 
@@ -146,16 +150,33 @@ h6 {
     }
 
     .layer {
-        gap: 12px;
-        margin-bottom: 24px;
+        gap: 10px;
+        margin-bottom: 20px;
     }
 
     .product {
-        min-width: 160px;
+        min-width: 145px;
+        padding: 10px;
     }
 
     .product img {
-        height: 110px;
+        height: 100px;
+    }
+
+    .product .name {
+        font-size: 13px;
+        margin-top: 8px;
+    }
+
+    .product .price {
+        font-size: 13px;
+        margin-top: 3px;
+    }
+
+    .product button {
+        margin-top: 8px;
+        padding: 8px;
+        font-size: 12px;
     }
 
     #cartButton {
@@ -168,16 +189,17 @@ h6 {
     #cartWidget {
         width: 100%;
         right: -100%;
+        padding: 20px;
     }
 
     #cartWidget.open {
-        right: 0 !important;
+        right: 0;
     }
 }
 
 @media (max-width: 480px) {
     body {
-        padding: 12px;
+        padding: 10px;
         padding-bottom: 70px;
     }
 
@@ -186,29 +208,29 @@ h6 {
     }
 
     .layer {
-        gap: 10px;
+        gap: 8px;
     }
 
     .product {
-        min-width: 140px;
-        padding: 10px;
+        min-width: 130px;
+        padding: 8px;
     }
 
     .product img {
-        height: 100px;
+        height: 90px;
     }
 
     .product .name {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .product .price {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .product button {
-        font-size: 13px;
-        padding: 8px;
+        font-size: 11px;
+        padding: 7px;
     }
 }
 </style>
@@ -242,13 +264,7 @@ function addToCart(product, cost) {
 
 function toggleCart() {
     const w = document.getElementById("cartWidget");
-    const isMobile = window.innerWidth <= 768;
-    
-    if (isMobile) {
-        w.classList.toggle('open');
-    } else {
-        w.style.right = w.style.right === "0px" ? "-320px" : "0px";
-    }
+    w.classList.toggle('open');
     renderCart();
 }
 
@@ -444,7 +460,7 @@ for (let layer = 0; layer < 3; layer++) {
 <h5>© Blopperbold GMBH und Co.KG. Alle Rechte vorbehalten.</h5>
 <h6>Diese Seite ist nur eine Überleitungsstelle, keine Bestellungen werden von uns gehandelt.</h6>
 <h10>Der Verkauf von Snus an Personen unter 18 Jahren ist verboten. Bitte kaufe und konsumiere verantwortungsbewusst.</h10>
-<h10>Update 1.1</h10>
+<h10>Update 1.2</h10>
 </div>
 </body>
 </html>
