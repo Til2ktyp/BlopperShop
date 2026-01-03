@@ -16,7 +16,65 @@ body {
 header {
     font-size: 28px;
     font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 24px;
+}
+
+#filterButton {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#filterButton:hover {
+    background: #000;
+}
+
+#filterMenu {
+    position: absolute;
+    top: 60px;
+    right: 24px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    padding: 8px;
+    display: none;
+    z-index: 100;
+}
+
+#filterMenu.open {
+    display: block;
+}
+
+#filterMenu button {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-bottom: 4px;
+}
+
+#filterMenu button:hover {
+    background: #f6f7f9;
+}
+
+#filterMenu button.active {
+    background: #111;
+    color: #fff;
 }
 
 h6 {
@@ -31,14 +89,24 @@ h6 {
     margin-bottom: 32px;
 }
 
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
 .product {
-    min-width: 190px;
     background: #fff;
     border-radius: 14px;
     padding: 12px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.06);
     display: flex;
     flex-direction: column;
+}
+
+.layer .product {
+    min-width: 190px;
 }
 
 .product img {
@@ -143,6 +211,50 @@ h6 {
     color: #666;
 }
 
+#moreButton {
+    display: block;
+    margin: 40px auto 20px auto;
+    padding: 14px 32px;
+    border-radius: 10px;
+    border: none;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#moreButton:hover {
+    background: #000;
+}
+
+#extraWidget {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 90%;
+    max-width: 900px;
+    height: 100%;
+    background: #fff;
+    border-left: 1px solid #e5e7eb;
+    padding: 20px;
+    transition: right 0.3s ease;
+    overflow-y: auto;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.08);
+    z-index: 1000;
+    visibility: hidden;
+    box-sizing: border-box;
+}
+
+#extraWidget.open {
+    right: 0;
+    visibility: visible;
+}
+
+#extraWidget h2 {
+    margin: 0 0 20px 0;
+}
+
 /* Mobile Anpassungen */
 @media (max-width: 768px) {
     body {
@@ -160,8 +272,16 @@ h6 {
         margin-bottom: 20px;
     }
 
-    .product {
+    .layer .product {
         min-width: 145px;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+        gap: 10px;
+    }
+
+    .product {
         padding: 10px;
     }
 
@@ -218,8 +338,16 @@ h6 {
         gap: 8px;
     }
 
-    .product {
+    .layer .product {
         min-width: 130px;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 8px;
+    }
+
+    .product {
         padding: 8px;
     }
 
@@ -244,12 +372,33 @@ h6 {
 </head>
 <body>
 
-<header>BlopperShop</header>
+<div class="header-container">
+  <header>BlopperShop</header>
+  <button id="filterButton" onclick="toggleFilter()">Filter</button>
+</div>
+
+<div id="filterMenu">
+  <button onclick="setFilter('all')" class="active">Alle</button>
+  <button onclick="setFilter('anfaenger')">Mittel</button>
+  <button onclick="setFilter('mittelgaenger')">Stark</button>
+  <button onclick="setFilter('experte')">Extra Stark</button>
+</div>
+
 <h6>Einzigartig. Sicher. Snus.</h6>
 
 <div id="shop"></div>
 
+<button id="moreButton" onclick="toggleExtra()">Mehr Anzeigen</button>
+
 <button id="cartButton" onclick="toggleCart()">Warenkorb</button>
+
+<div id="extraWidget" class="">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <h2>Weitere Produkte</h2>
+    <button onclick="toggleExtra()" style="width:auto;">✕</button>
+  </div>
+  <div id="extraProducts" class="product-grid"></div>
+</div>
 
 <div id="cartWidget" class="">
   <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -264,15 +413,42 @@ h6 {
 
 <script>
 const cart = [];
+let currentFilter = 'all';
 
 function addToCart(product, cost) {
     cart.push({ product, cost });
+}
+
+function toggleFilter() {
+    const menu = document.getElementById("filterMenu");
+    menu.classList.toggle('open');
+}
+
+function setFilter(filter) {
+    currentFilter = filter;
+    
+    // Update active button
+    const buttons = document.querySelectorAll('#filterMenu button');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Close menu
+    toggleFilter();
+    
+    // Re-render products
+    renderProducts();
 }
 
 function toggleCart() {
     const w = document.getElementById("cartWidget");
     w.classList.toggle('open');
     renderCart();
+}
+
+function toggleExtra() {
+    const w = document.getElementById("extraWidget");
+    w.classList.toggle('open');
+    renderExtraProducts();
 }
 
 function renderCart() {
@@ -353,76 +529,156 @@ function checkout() {
 }
 
 const products = [
-  { name: "Pablo Ice Cold",  price: "4.99", image: "Produkte/PIcecold.jpeg" },
-  { name: "Pablo Exclusive Pear",  price: "4.99", image: "Produkte/Pear.jpeg" },
-  { name: "Pablo Exclusive Kiwi",  price: "4.99", image: "Produkte/Kiwi.jpeg" },
-  { name: "Pablo Exclusive Orange",  price: "4.99", image: "Produkte/Orange.jpeg" },
-  { name: "Pablo Red",  price: "4.99", image: "Produkte/PRed.jpeg" },
-  { name: "Pablo Exclusive Strawberry Watermelon",  price: "4.99", image: "Produkte/Strawberrywatermelon.jpeg" },
-  { name: "Pablo Exclusive Lemonade",  price: "4.99", image: "Produkte/Lemonade.jpeg" },
-  { name: "Pablo Exclusive Sour Blueberries",  price: "4.99", image: "Produkte/Sourblueberry.jpeg" },
-  { name: "Pablo Exclusive Tropical Punch",  price: "4.99", image: "Produkte/Tropicalpunch.jpeg" },
-  { name: "Pablo Exclusive Blue Raspberry", price: "4.99", image: "Produkte/Blueraspberry.jpeg" },
-  { name: "Pablo Exclusive Passion Fruit", price: "4.99", image: "Produkte/Passionfruit.jpeg" },
-  { name: "Pablo Exclusive Frosted Mint", price: "4.99", image: "Produkte/Frostedmint.jpeg" },
-  { name: "Pablo Grape Ice", price: "4.99", image: "Produkte/Grapeice.jpeg" },
-  { name: "Pablo Mango Ice", price: "4.99", image: "Produkte/MangoIce.jpeg" },
-  { name: "Pablo Strawberry Kiwi", price: "4.99", image: "Produkte/Strawberrykiwi.jpeg" },
-  { name: "Pablo Banana Ice", price: "4.99", image: "Produkte/Bananaice.jpeg" },
-  { name: "Pablo Strawberry Lynchee", price: "4.99", image: "Produkte/Strawberrylynchee.jpeg" },
-  { name: "Pablo Blueberry Peach Ice", price: "4.99", image: "Produkte/Blueberrypeachice.jpeg" },
+  { name: "Pablo Ice Cold",  price: "4.99", image: "Produkte/PIcecold.jpeg", category: "experte" },
+  { name: "Pablo Exclusive Pear",  price: "4.99", image: "Produkte/Pear.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Exclusive Kiwi",  price: "4.99", image: "Produkte/Kiwi.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Exclusive Orange",  price: "4.99", image: "Produkte/Orange.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Red",  price: "4.99", image: "Produkte/PRed.jpeg", category: "experte" },
+  { name: "Pablo Exclusive Strawberry Watermelon",  price: "4.99", image: "Produkte/Strawberrywatermelon.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Exclusive Lemonade",  price: "4.99", image: "Produkte/Lemonade.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Exclusive Sour Blueberries",  price: "4.99", image: "Produkte/Sourblueberry.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Exclusive Tropical Punch",  price: "4.99", image: "Produkte/Tropicalpunch.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Exclusive Blue Raspberry", price: "4.99", image: "Produkte/Blueraspberry.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Exclusive Passion Fruit", price: "4.99", image: "Produkte/Passionfruit.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Exclusive Frosted Mint", price: "4.99", image: "Produkte/Frostedmint.jpeg", category: "experte" },
+  { name: "Pablo Grape Ice", price: "4.99", image: "Produkte/Grapeice.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Mango Ice", price: "4.99", image: "Produkte/MangoIce.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Strawberry Kiwi", price: "4.99", image: "Produkte/Strawberrykiwi.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Banana Ice", price: "4.99", image: "Produkte/Bananaice.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Strawberry Lynchee", price: "4.99", image: "Produkte/Strawberrylynchee.jpeg", category: "mittelgaenger" },
+  { name: "Pablo Blueberry Peach Ice", price: "4.99", image: "Produkte/Blueberrypeachice.jpeg", category: "mittelgaenger" },
+  
+  { name: "Cuba Grape", price: "4.99", image: "Produkte/CGrape.jpeg", category: "anfaenger" },
+  { name: "Cuba Banana Hit", price: "4.99", image: "Produkte/CBananaHit.jpeg", category: "anfaenger" },
+  { name: "Cuba Cherry", price: "4.99", image: "Produkte/CCherry.jpeg", category: "anfaenger" },
+  { name: "Cuba Peach", price: "4.99", image: "Produkte/CPeach.jpeg", category: "anfaenger" },
+  { name: "Cuba Black Currant", price: "4.99", image: "Produkte/CBlackCurrant.jpeg", category: "anfaenger" },
+  { name: "Cuba Cola", price: "4.99", image: "Produkte/CCola.jpeg", category: "anfaenger" },
+  { name: "Cuba Apple Juice", price: "4.99", image: "Produkte/CAppleJuice.jpeg", category: "anfaenger" },
+  { name: "Cuba Watermelon", price: "4.99", image: "Produkte/CWatermelon.jpeg", category: "anfaenger" },
+  { name: "Cuba Forest Berries", price: "4.99", image: "Produkte/CForestBerries.jpeg", category: "anfaenger" },
+  { name: "Cuba Blueberry", price: "4.99", image: "Produkte/CBlueberry.jpeg", category: "anfaenger" },
 
-  { name: "Cuba Grape", price: "4.99", image: "Produkte/CGrape.jpeg" },
-  { name: "Cuba Banana Hit", price: "4.99", image: "Produkte/CBananaHit.jpeg" },
-  { name: "Cuba Cherry", price: "4.99", image: "Produkte/CCherry.jpeg" },
-  { name: "Cuba Peach", price: "4.99", image: "Produkte/CPeach.jpeg" },
-  { name: "Cuba Black Currant", price: "4.99", image: "Produkte/CBlackCurrant.jpeg" },
-  { name: "Cuba Cola", price: "4.99", image: "Produkte/CCola.jpeg" },
-  { name: "Cuba Apple Juice", price: "4.99", image: "Produkte/CAppleJuice.jpeg" },
-  { name: "Cuba Watermelon", price: "4.99", image: "Produkte/CWatermelon.jpeg" },
-  { name: "Cuba Forest Berries", price: "4.99", image: "Produkte/CForestBerries.jpeg" },
-  { name: "Cuba Blueberry", price: "4.99", image: "Produkte/CBlueberry.jpeg" },
-
-  { name: "Iceberg Strawberry Mango Gum", price: "4.99", image: "Produkte/ICStrawberryMangoGum.jpeg" },
-  { name: "Iceberg Emerald", price: "4.99", image: "Produkte/ICEmerald.jpeg" },
-  { name: "Iceberg Crazy Mix", price: "4.99", image: "Produkte/ICCrazyMix.jpeg" },
-  { name: "Iceberg Cherry Apricot Gum", price: "4.99", image: "Produkte/ICCherryApricotGum.jpeg" },
-  { name: "Iceberg Dragon Fire", price: "4.99", image: "Produkte/ICDragonFire.jpeg" },
-  { name: "Iceberg Cola", price: "4.99", image: "Produkte/ICCola.jpeg" },
-  { name: "Iceberg Wild Berries", price: "4.99", image: "Produkte/ICWildBerries.jpeg" },
-  { name: "Iceberg Strawberry Pomegranate", price: "4.99", image: "Produkte/ICStrawberryPomegranate.jpeg" },
-  { name: "Iceberg Apple Lemon Pineapple", price: "4.99", image: "Produkte/ICAppleLemonPineapple.jpeg" },
-  { name: "Iceberg Mango Banana", price: "30.00", image: "Produkte/ICMangoBanana.jpeg" },
-  { name: "Iceberg Melon Peach", price: "4.99", image: "Produkte/ICMelonPeach.jpeg" },
-  { name: "Iceberg Grape", price: "4.99", image: "Produkte/ICGrape.jpeg" },
-  { name: "Iceberg Sour Berries", price: "4.99", image: "Produkte/ICSourBerries.jpeg" },
-  { name: "Iceberg Guava Lime", price: "4.99", image: "Produkte/ICGuavaLime.jpeg" },
-  { name: "Iceberg Arasaka", price: "4.99", image: "Produkte/ICArasaka.jpeg" },
-  { name: "Iceberg Kiwi Strawberry", price: "4.99", image: "Produkte/ICKiwiStrawberry.jpeg" },
+  { name: "Iceberg Strawberry Mango Gum", price: "4.99", image: "Produkte/ICStrawberryMangoGum.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Emerald", price: "4.99", image: "Produkte/ICEmerald.jpeg", category: "experte" },
+  { name: "Iceberg Crazy Mix", price: "4.99", image: "Produkte/ICCrazyMix.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Cherry Apricot Gum", price: "4.99", image: "Produkte/ICCherryApricotGum.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Dragon Fire", price: "4.99", image: "Produkte/ICDragonFire.jpeg", category: "experte" },
+  { name: "Iceberg Cola", price: "4.99", image: "Produkte/ICCola.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Wild Berries", price: "4.99", image: "Produkte/ICWildBerries.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Strawberry Pomegranate", price: "4.99", image: "Produkte/ICStrawberryPomegranate.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Apple Lemon Pineapple", price: "4.99", image: "Produkte/ICAppleLemonPineapple.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Mango Banana", price: "30.00", image: "Produkte/ICMangoBanana.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Melon Peach", price: "4.99", image: "Produkte/ICMelonPeach.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Grape", price: "4.99", image: "Produkte/ICGrape.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Sour Berries", price: "4.99", image: "Produkte/ICSourBerries.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Guava Lime", price: "4.99", image: "Produkte/ICGuavaLime.jpeg", category: "mittelgaenger" },
+  { name: "Iceberg Arasaka", price: "4.99", image: "Produkte/ICArasaka.jpeg", category: "experte" },
+  { name: "Iceberg Kiwi Strawberry", price: "4.99", image: "Produkte/ICKiwiStrawberry.jpeg", category: "mittelgaenger" },
 ];
 
-for (let i = 1; i <= 70; i++) {
-    products.push({
-        name: "Produkt " + i,
-        price: (i * 1.5).toFixed(2),
-        image: ""
-    });
+// Extra Produkte für "Mehr Anzeigen"
+const extraProducts = [
+  { name: "Cumshot", price: "11,99", image: "", category: "anfaenger" },
+  { name: "Extra Produkt 2", price: "5.99", image: "", category: "anfaenger" },
+  { name: "Extra Produkt 3", price: "5.99", image: "", category: "mittelgaenger" },
+  { name: "Extra Produkt 4", price: "5.99", image: "", category: "mittelgaenger" },
+  { name: "Extra Produkt 5", price: "5.99", image: "", category: "experte" },
+  { name: "Extra Produkt 6", price: "5.99", image: "", category: "experte" },
+  { name: "Extra Produkt 7", price: "5.99", image: "", category: "anfaenger" },
+  { name: "Extra Produkt 8", price: "5.99", image: "", category: "anfaenger" },
+  { name: "Extra Produkt 9", price: "5.99", image: "", category: "mittelgaenger" },
+  { name: "Extra Produkt 10", price: "5.99", image: "", category: "mittelgaenger" },
+  { name: "Extra Produkt 11", price: "5.99", image: "", category: "experte" },
+  { name: "Extra Produkt 12", price: "5.99", image: "", category: "experte" },
+  { name: "Extra Produkt 13", price: "5.99", image: "", category: "anfaenger" },
+  { name: "Extra Produkt 14", price: "5.99", image: "", category: "anfaenger" },
+  { name: "Extra Produkt 15", price: "5.99", image: "", category: "mittelgaenger" },
+  { name: "Extra Produkt 16", price: "5.99", image: "", category: "mittelgaenger" },
+  { name: "Extra Produkt 17", price: "5.99", image: "", category: "experte" },
+  { name: "Extra Produkt 18", price: "5.99", image: "", category: "experte" },
+  { name: "Extra Produkt 19", price: "5.99", image: "", category: "anfaenger" },
+  { name: "Extra Produkt 20", price: "5.99", image: "", category: "mittelgaenger" },
+];
+
+function renderProducts() {
+    const shop = document.getElementById("shop");
+    shop.innerHTML = "";
+    
+    // Get all products (main + extra) and filter
+    let allProducts = [...products, ...extraProducts];
+    let filteredProducts = allProducts.filter(p => !p.name.startsWith("Produkt "));
+    
+    if (currentFilter !== 'all') {
+        filteredProducts = filteredProducts.filter(p => p.category === currentFilter);
+    }
+    
+    // Show in grid if filtered, show in rows if "all"
+    if (currentFilter === 'all') {
+        // Original row layout - only main products
+        let mainProducts = products.filter(p => !p.name.startsWith("Produkt "));
+        let index = 0;
+        const rowSizes = [18, 10, 16];
+
+        for (let layer = 0; layer < 3; layer++) {
+            const row = document.createElement("div");
+            row.className = "layer";
+
+            const itemsInRow = rowSizes[layer];
+            
+            for (let i = 0; i < itemsInRow && index < mainProducts.length; i++) {
+                const p = mainProducts[index];
+
+                const div = document.createElement("div");
+                div.className = "product";
+                div.innerHTML = `
+                    <img src="${p.image}">
+                    <div class="name">${p.name}</div>
+                    <div class="price">${p.price} €</div>
+                    <button onclick="addToCart('${p.name}', '${p.price}')">
+                        In den Warenkorb
+                    </button>
+                `;
+
+                row.appendChild(div);
+                index++;
+            }
+
+            shop.appendChild(row);
+        }
+    } else {
+        // Grid layout for filtered products (including extra products)
+        const grid = document.createElement("div");
+        grid.className = "product-grid";
+        
+        filteredProducts.forEach(p => {
+            const div = document.createElement("div");
+            div.className = "product";
+            div.innerHTML = `
+                <img src="${p.image}">
+                <div class="name">${p.name}</div>
+                <div class="price">${p.price} €</div>
+                <button onclick="addToCart('${p.name}', '${p.price}')">
+                    In den Warenkorb
+                </button>
+            `;
+            grid.appendChild(div);
+        });
+        
+        shop.appendChild(grid);
+    }
 }
 
-const shop = document.getElementById("shop");
-let index = 0;
-
-const rowSizes = [18, 10, 16]; // Pablo: 18, Cuba: 10, Iceberg: 16
-
-for (let layer = 0; layer < 3; layer++) {
-    const row = document.createElement("div");
-    row.className = "layer";
-
-    const itemsInRow = rowSizes[layer];
+function renderExtraProducts() {
+    const container = document.getElementById("extraProducts");
+    container.innerHTML = "";
     
-    for (let i = 0; i < itemsInRow && index < products.length; i++) {
-        const p = products[index];
-
+    // Filter extra products
+    let filteredExtra = currentFilter === 'all' 
+        ? extraProducts 
+        : extraProducts.filter(p => p.category === currentFilter);
+    
+    filteredExtra.forEach(p => {
         const div = document.createElement("div");
         div.className = "product";
         div.innerHTML = `
@@ -433,19 +689,18 @@ for (let layer = 0; layer < 3; layer++) {
                 In den Warenkorb
             </button>
         `;
-
-        row.appendChild(div);
-        index++;
-    }
-
-    shop.appendChild(row);
+        container.appendChild(div);
+    });
 }
+
+// Initial render
+renderProducts();
 </script>
 <div class="footer-text">
 <h4>© Blopperbold GMBH und Co.KG. Alle Rechte vorbehalten.</h4>
 <h5>Diese Seite ist nur eine Überleitungsstelle, keine Bestellungen werden von uns gehandelt.</h5>
 <h6>Der Verkauf von Snus an Personen unter 18 Jahren ist verboten. Bitte kaufe und konsumiere verantwortungsbewusst.</h6>
-<h6>Update 1.3</h6>
+<h6>Update 1.4</h6>
 </div>
 </body>
 </html>
