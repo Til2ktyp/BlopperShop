@@ -99,10 +99,13 @@ h6 {
     overflow-y: auto;
     box-shadow: -10px 0 30px rgba(0,0,0,0.08);
     z-index: 1000;
+    visibility: hidden;
+    box-sizing: border-box;
 }
 
 #cartWidget.open {
     right: 0;
+    visibility: visible;
 }
 
 #cartWidget h3 {
@@ -190,6 +193,7 @@ h6 {
         width: 100%;
         right: -100%;
         padding: 20px;
+        box-sizing: border-box;
     }
 
     #cartWidget.open {
@@ -244,7 +248,7 @@ h6 {
 
 <button id="cartButton" onclick="toggleCart()">Warenkorb</button>
 
-<div id="cartWidget">
+<div id="cartWidget" class="">
   <div style="display:flex;justify-content:space-between;align-items:center;">
     <h3>Warenkorb</h3>
     <button onclick="toggleCart()" style="width:auto;">✕</button>
@@ -457,10 +461,10 @@ for (let layer = 0; layer < 3; layer++) {
 }
 </script>
 <div class="footer-text">
-<h4>© Blopperbold GMBH und Co.KG. Alle Rechte vorbehalten.</h5>
-<h5>Diese Seite ist nur eine Überleitungsstelle, keine Bestellungen werden von uns gehandelt.</h6>
+<h4>© Blopperbold GMBH und Co.KG. Alle Rechte vorbehalten.</h4>
+<h5>Diese Seite ist nur eine Überleitungsstelle, keine Bestellungen werden von uns gehandelt.</h5>
 <h6>Der Verkauf von Snus an Personen unter 18 Jahren ist verboten. Bitte kaufe und konsumiere verantwortungsbewusst.</h6>
-<h6>Update 1.2</h6>
+<h6>Update 1.3</h6>
 </div>
 </body>
 </html>
