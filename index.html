@@ -122,6 +122,12 @@ h6 {
     font-weight: 600;
 }
 
+.product .mg {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #777;
+}
+
 .product .price {
     margin-top: 4px;
     color: #555;
@@ -314,6 +320,10 @@ h6 {
         margin-top: 8px;
     }
 
+    .product .mg {
+        font-size: 12px;
+    }
+
     .product .price {
         font-size: 13px;
         margin-top: 3px;
@@ -386,6 +396,10 @@ h6 {
 
     .product .name {
         font-size: 12px;
+    }
+
+    .product .mg {
+        font-size: 11px;
     }
 
     .product .price {
@@ -570,68 +584,68 @@ function checkout() {
 }
 
 const products = [
-  { name: "Pablo Ice Cold",  price: "4.99", image: "Produkte/PIcecold.jpeg", category: "stark" },
-  { name: "Pablo Red",  price: "4.99", image: "Produkte/PRed.jpeg", category: "stark" },
-  { name: "Pablo Exclusive Pear",  price: "4.99", image: "Produkte/Pear.jpeg", category: "stark" },
-  { name: "Pablo Exclusive Kiwi",  price: "4.99", image: "Produkte/Kiwi.jpeg", category: "stark" },
-  { name: "Pablo Exclusive Orange",  price: "4.99", image: "Produkte/Orange.jpeg", category: "stark" },
-  { name: "Pablo Exclusive Strawberry Watermelon",  price: "4.99", image: "Produkte/Strawberrywatermelon.jpeg", category: "stark" },
-  { name: "Pablo Exclusive Lemonade",  price: "4.99", image: "Produkte/Lemonade.jpeg", category: "stark" },
-  { name: "Pablo Exclusive Sour Blueberries",  price: "4.99", image: "Produkte/Sourblueberry.jpeg", category: "stark" },
-  { name: "Pablo Exclusive Tropical Punch",  price: "4.99", image: "Produkte/Tropicalpunch.jpeg", category: "stark" },
-  { name: "Pablo Exclusive Blue Raspberry", price: "4.99", image: "Produkte/Blueraspberry.jpeg", category: "stark" },
-  { name: "Pablo Exclusive Passion Fruit", price: "4.99", image: "Produkte/Passionfruit.jpeg", category: "stark" },
-  { name: "Pablo Blueberry Peach Ice", price: "4.99", image: "Produkte/Blueberrypeachice.jpeg", category: "stark" },
-  { name: "Pablo Strawberry Kiwi", price: "4.99", image: "Produkte/Strawberrykiwi.jpeg", category: "stark" },
-  { name: "Pablo Banana Ice", price: "4.99", image: "Produkte/Bananaice.jpeg", category: "stark" },
-  { name: "Pablo Strawberry Lynchee", price: "4.99", image: "Produkte/Strawberrylynchee.jpeg", category: "stark" },
-  { name: "Pablo Exclusive Frosted Mint", price: "4.99", image: "Produkte/Frostedmint.jpeg", category: "stark" },
-  { name: "Pablo Mango Ice", price: "4.99", image: "Produkte/MangoIce.jpeg", category: "stark" },
-  { name: "Pablo Grape Ice", price: "4.99", image: "Produkte/Grapeice.jpeg", category: "stark" },
-  
-  { name: "Cuba Grape", price: "4.99", image: "Produkte/CGrape.jpeg", category: "extrastark" },
-  { name: "Cuba Banana Hit", price: "4.99", image: "Produkte/CBananaHit.jpeg", category: "extrastark" },
-  { name: "Cuba Cherry", price: "4.99", image: "Produkte/CCherry.jpeg", category: "extrastark" },
-  { name: "Cuba Peach", price: "4.99", image: "Produkte/CPeach.jpeg", category: "extrastark" },
-  { name: "Cuba Black Currant", price: "4.99", image: "Produkte/CBlackCurrant.jpeg", category: "extrastark" },
-  { name: "Cuba Cola", price: "4.99", image: "Produkte/CCola.jpeg", category: "extrastark" },
-  { name: "Cuba Apple Juice", price: "4.99", image: "Produkte/CAppleJuice.jpeg", category: "extrastark" },
-  { name: "Cuba Watermelon", price: "4.99", image: "Produkte/CWatermelon.jpeg", category: "extrastark" },
-  { name: "Cuba Forest Berries", price: "4.99", image: "Produkte/CForestBerries.jpeg", category: "extrastark" },
-  { name: "Cuba Blueberry", price: "4.99", image: "Produkte/CBlueberry.jpeg", category: "extrastark" },
+  { name: "Pablo Ice Cold",  price: "4.99", mg: "30mg/g", image: "Produkte/PIcecold.jpeg", category: "stark" },
+  { name: "Pablo Red",  price: "4.99", mg: "30mg/g", image: "Produkte/PRed.jpeg", category: "stark" },
+  { name: "Pablo Exclusive Pear",  price: "4.99", mg: "50mg/g", image: "Produkte/Pear.jpeg", category: "stark" },
+  { name: "Pablo Exclusive Kiwi",  price: "4.99", mg: "50mg/g", image: "Produkte/Kiwi.jpeg", category: "stark" },
+  { name: "Pablo Exclusive Orange",  price: "4.99", mg: "50mg/g", image: "Produkte/Orange.jpeg", category: "stark" },
+  { name: "Pablo Exclusive Strawberry Watermelon",  price: "4.99", mg: "50mg/g", image: "Produkte/Strawberrywatermelon.jpeg", category: "stark" },
+  { name: "Pablo Exclusive Lemonade",  price: "4.99", mg: "50mg/g", image: "Produkte/Lemonade.jpeg", category: "stark" },
+  { name: "Pablo Exclusive Sour Blueberries",  price: "4.99", mg: "50mg/g", image: "Produkte/Sourblueberry.jpeg", category: "stark" },
+  { name: "Pablo Exclusive Tropical Punch",  price: "4.99", mg: "50mg/g", image: "Produkte/Tropicalpunch.jpeg", category: "stark" },
+  { name: "Pablo Exclusive Blue Raspberry", price: "4.99", mg: "50mg/g", image: "Produkte/Blueraspberry.jpeg", category: "stark" },
+  { name: "Pablo Exclusive Passion Fruit", price: "4.99", mg: "50mg/g", image: "Produkte/Passionfruit.jpeg", category: "stark" },
+  { name: "Pablo Blueberry Peach Ice", price: "4.99", mg: "50mg/g", image: "Produkte/Blueberrypeachice.jpeg", category: "stark" },
+  { name: "Pablo Strawberry Kiwi", price: "4.99", mg: "50mg/g", image: "Produkte/Strawberrykiwi.jpeg", category: "stark" },
+  { name: "Pablo Banana Ice", price: "4.99", mg: "50mg/g", image: "Produkte/Bananaice.jpeg", category: "stark" },
+  { name: "Pablo Strawberry Lynchee", price: "4.99", mg: "50mg/g", image: "Produkte/Strawberrylynchee.jpeg", category: "stark" },
+  { name: "Pablo Exclusive Frosted Mint", price: "4.99", mg: "50mg/g", image: "Produkte/Frostedmint.jpeg", category: "stark" },
+  { name: "Pablo Mango Ice", price: "4.99", mg: "50mg/g", image: "Produkte/MangoIce.jpeg", category: "stark" },
+  { name: "Pablo Grape Ice", price: "4.99", mg: "50mg/g", image: "Produkte/Grapeice.jpeg", category: "stark" },
 
-  { name: "Iceberg Kiwi Strawberry", price: "4.99", image: "Produkte/ICKiwiStrawberry.jpeg", category: "extrastark" },
-  { name: "Iceberg Dragon Fire", price: "4.99", image: "Produkte/ICDragonFire.jpeg", category: "extrastark" },
-  { name: "Iceberg Emerald", price: "4.99", image: "Produkte/ICEmerald.jpeg", category: "extrastark" },
-  { name: "Iceberg Crazy Mix", price: "4.99", image: "Produkte/ICCrazyMix.jpeg", category: "extrastark" },
-  { name: "Iceberg Cherry Apricot Gum", price: "4.99", image: "Produkte/ICCherryApricotGum.jpeg", category: "extrastark" },
-  { name: "Iceberg Strawberry Mango Gum", price: "4.99", image: "Produkte/ICStrawberryMangoGum.jpeg", category: "extrastark" },
-  { name: "Iceberg Cola", price: "4.99", image: "Produkte/ICCola.jpeg", category: "extrastark" },
-  { name: "Iceberg Wild Berries", price: "4.99", image: "Produkte/ICWildBerries.jpeg", category: "extrastark" },
-  { name: "Iceberg Strawberry Pomegranate", price: "4.99", image: "Produkte/ICStrawberryPomegranate.jpeg", category: "extrastark" },
-  { name: "Iceberg Apple Lemon Pineapple", price: "4.99", image: "Produkte/ICAppleLemonPineapple.jpeg", category: "extrastark" },
-  { name: "Iceberg Mango Banana", price: "30.00", image: "Produkte/ICMangoBanana.jpeg", category: "extrastark" },
-  { name: "Iceberg Melon Peach", price: "4.99", image: "Produkte/ICMelonPeach.jpeg", category: "extrastark" },
-  { name: "Iceberg Grape", price: "4.99", image: "Produkte/ICGrape.jpeg", category: "extrastark" },
-  { name: "Iceberg Sour Berries", price: "4.99", image: "Produkte/ICSourBerries.jpeg", category: "extrastark" },
-  { name: "Iceberg Guava Lime", price: "4.99", image: "Produkte/ICGuavaLime.jpeg", category: "extrastark" },
-  { name: "Iceberg Arasaka", price: "4.99", image: "Produkte/ICArasaka.jpeg", category: "extrastark" },
+  { name: "Cuba Grape", price: "4.99", mg: "43mg/g", image: "Produkte/CGrape.jpeg", category: "extrastark" },
+  { name: "Cuba Banana Hit", price: "4.99", mg: "43mg/g", image: "Produkte/CBananaHit.jpeg", category: "extrastark" },
+  { name: "Cuba Cherry", price: "4.99", mg: "43mg/g", image: "Produkte/CCherry.jpeg", category: "extrastark" },
+  { name: "Cuba Peach", price: "4.99", mg: "43mg/g", image: "Produkte/CPeach.jpeg", category: "extrastark" },
+  { name: "Cuba Black Currant", price: "4.99", mg: "43mg/g", image: "Produkte/CBlackCurrant.jpeg", category: "extrastark" },
+  { name: "Cuba Cola", price: "4.99", mg: "43mg/g", image: "Produkte/CCola.jpeg", category: "extrastark" },
+  { name: "Cuba Apple Juice", price: "4.99", mg: "43mg/g", image: "Produkte/CAppleJuice.jpeg", category: "extrastark" },
+  { name: "Cuba Watermelon", price: "4.99", mg: "43mg/g", image: "Produkte/CWatermelon.jpeg", category: "extrastark" },
+  { name: "Cuba Forest Berries", price: "4.99", mg: "43mg/g", image: "Produkte/CForestBerries.jpeg", category: "extrastark" },
+  { name: "Cuba Blueberry", price: "4.99", mg: "43mg/g", image: "Produkte/CBlueberry.jpeg", category: "extrastark" },
+
+  { name: "Iceberg Kiwi Strawberry", price: "4.99", mg: "50mg/g", image: "Produkte/ICKiwiStrawberry.jpeg", category: "extrastark" },
+  { name: "Iceberg Dragon Fire", price: "4.99", mg: "50mg/g", image: "Produkte/ICDragonFire.jpeg", category: "extrastark" },
+  { name: "Iceberg Emerald", price: "4.99", mg: "50mg/g", image: "Produkte/ICEmerald.jpeg", category: "extrastark" },
+  { name: "Iceberg Crazy Mix", price: "4.99", mg: "50mg/g", image: "Produkte/ICCrazyMix.jpeg", category: "extrastark" },
+  { name: "Iceberg Cherry Apricot Gum", price: "4.99", mg: "50mg/g", image: "Produkte/ICCherryApricotGum.jpeg", category: "extrastark" },
+  { name: "Iceberg Strawberry Mango Gum", price: "4.99", mg: "50mg/g", image: "Produkte/ICStrawberryMangoGum.jpeg", category: "extrastark" },
+  { name: "Iceberg Cola", price: "4.99", mg: "50mg/g", image: "Produkte/ICCola.jpeg", category: "extrastark" },
+  { name: "Iceberg Wild Berries", price: "4.99", mg: "50mg/g", image: "Produkte/ICWildBerries.jpeg", category: "extrastark" },
+  { name: "Iceberg Strawberry Pomegranate", price: "4.99", mg: "50mg/g", image: "Produkte/ICStrawberryPomegranate.jpeg", category: "extrastark" },
+  { name: "Iceberg Apple Lemon Pineapple", price: "4.99", mg: "50mg/g", image: "Produkte/ICAppleLemonPineapple.jpeg", category: "extrastark" },
+  { name: "Iceberg Mango Banana", price: "30.00", mg: "50mg/g", image: "Produkte/ICMangoBanana.jpeg", category: "extrastark" },
+  { name: "Iceberg Melon Peach", price: "4.99", mg: "50mg/g", image: "Produkte/ICMelonPeach.jpeg", category: "extrastark" },
+  { name: "Iceberg Grape", price: "4.99", mg: "50mg/g", image: "Produkte/ICGrape.jpeg", category: "extrastark" },
+  { name: "Iceberg Sour Berries", price: "4.99", mg: "50mg/g", image: "Produkte/ICSourBerries.jpeg", category: "extrastark" },
+  { name: "Iceberg Guava Lime", price: "4.99", mg: "50mg/g", image: "Produkte/ICGuavaLime.jpeg", category: "extrastark" },
+  { name: "Iceberg Arasaka", price: "4.99", mg: "50mg/g", image: "Produkte/ICArasaka.jpeg", category: "extrastark" },
 ];
 
 // Extra Produkte für "Mehr Anzeigen"
 const extraProducts = [
-  { name: "Killa Lemonade", price: "4.99", image: "Produkte/KLemonade.jpeg", category: "mittelgaenger" },
-  { name: "Killa Apple", price: "4.99", image: "Produkte/KApple.jpeg", category: "mittelgaenger" },
-  { name: "Killa Blueberry", price: "4.99", image: "Produkte/KBlueberry.jpeg", category: "mittelgaenger" },
-  { name: "Killer Blue Raspberry", price: "4.99", image: "Produkte/KBlueRaspberry.jpeg", category: "mittelgaenger" },
-  { name: "Killer Cola", price: "4.99", image: "Produkte/KCola.jpeg", category: "mittelgaenger" },
-  { name: "Killer Cold Mint", price: "4.99", image: "Produkte/KColdMint.jpeg", category: "mittelgaenger" },
-  { name: "Killer Dark Cherry", price: "4.99", image: "Produkte/KDarkCherry.jpeg", category: "mittelgaenger" },
-  { name: "Killer Grape Ice", price: "4.99", image: "Produkte/KGrapeIce.jpeg", category: "mittelgaenger" },
-  { name: "Killer Mango Ice", price: "4.99", image: "Produkte/KMangoIce.jpeg", category: "mittelgaenger" },
-  { name: "Killer Orange", price: "4.99", image: "Produkte/KOrange.jpeg", category: "mittelgaenger" },
-  { name: "Killer Pineapple", price: "4.99", image: "Produkte/KPineapple.jpeg", category: "mittelgaenger" },
-  { name: "Killer Strawberry Lynchee", price: "4.99", image: "Produkte/KStrawberryLynchee.jpeg", category: "mittelgaenger" },
+  { name: "Killa Lemonade", price: "4.99", mg: "16mg/g", image: "Produkte/KLemonade.jpeg", category: "mittelgaenger" },
+  { name: "Killa Apple", price: "4.99", mg: "16mg/g", image: "Produkte/KApple.jpeg", category: "mittelgaenger" },
+  { name: "Killa Blueberry", price: "4.99", mg: "16mg/g", image: "Produkte/KBlueberry.jpeg", category: "mittelgaenger" },
+  { name: "Killer Blue Raspberry", price: "4.99", mg: "16mg/g", image: "Produkte/KBlueRaspberry.jpeg", category: "mittelgaenger" },
+  { name: "Killer Cola", price: "4.99", mg: "16mg/g", image: "Produkte/KCola.jpeg", category: "mittelgaenger" },
+  { name: "Killer Cold Mint", price: "4.99", mg: "16mg/g", image: "Produkte/KColdMint.jpeg", category: "mittelgaenger" },
+  { name: "Killer Dark Cherry", price: "4.99", mg: "16mg/g", image: "Produkte/KDarkCherry.jpeg", category: "mittelgaenger" },
+  { name: "Killer Grape Ice", price: "4.99", mg: "16mg/g", image: "Produkte/KGrapeIce.jpeg", category: "mittelgaenger" },
+  { name: "Killer Mango Ice", price: "4.99", mg: "16mg/g", image: "Produkte/KMangoIce.jpeg", category: "mittelgaenger" },
+  { name: "Killer Orange", price: "4.99", mg: "16mg/g", image: "Produkte/KOrange.jpeg", category: "mittelgaenger" },
+  { name: "Killer Pineapple", price: "4.99", mg: "16mg/g", image: "Produkte/KPineapple.jpeg", category: "mittelgaenger" },
+  { name: "Killer Strawberry Lynchee", price: "4.99", mg: "16mg/g", image: "Produkte/KStrawberryLynchee.jpeg", category: "mittelgaenger" },
 ];
 
 function renderProducts() {
@@ -667,6 +681,7 @@ function renderProducts() {
                 div.innerHTML = `
                     <img src="${p.image}">
                     <div class="name">${p.name}</div>
+                    <div class="mg">${p.mg}</div>
                     <div class="price">${p.price} €</div>
                     <button onclick="addToCart('${p.name}', '${p.price}')">
                         In den Warenkorb
@@ -690,6 +705,7 @@ function renderProducts() {
             div.innerHTML = `
                 <img src="${p.image}">
                 <div class="name">${p.name}</div>
+                <div class="mg">${p.mg}</div>
                 <div class="price">${p.price} €</div>
                 <button onclick="addToCart('${p.name}', '${p.price}')">
                     In den Warenkorb
@@ -717,6 +733,7 @@ function renderExtraProducts() {
         div.innerHTML = `
             <img src="${p.image}">
             <div class="name">${p.name}</div>
+            <div class="mg">${p.mg}</div>
             <div class="price">${p.price} €</div>
             <button onclick="addToCart('${p.name}', '${p.price}')">
                 In den Warenkorb
@@ -733,7 +750,7 @@ renderProducts();
 <h4>© Blopperbold GMBH und Co.KG. Alle Rechte vorbehalten.</h4>
 <h5>Diese Seite ist nur eine Überleitungsstelle, keine Bestellungen werden von uns gehandelt.</h5>
 <h6>Der Verkauf von Snus an Personen unter 18 Jahren ist verboten. Bitte kaufe und konsumiere verantwortungsbewusst.</h6>
-<h6>Update 1.6</h6>
+<h6>Update 1.7</h6>
 </div>
 </body>
 </html>
