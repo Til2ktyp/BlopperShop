@@ -371,13 +371,7 @@ const products = [
   { name: "Pablo Banana Ice", price: "4.99", image: "Produkte/Bananaice.jpeg" },
   { name: "Pablo Strawberry Lynchee", price: "4.99", image: "Produkte/Strawberrylynchee.jpeg" },
   { name: "Pablo Blueberry Peach Ice", price: "4.99", image: "Produkte/Blueberrypeachice.jpeg" },
-  { name: "Produkt 19", price: "10.50", image: "" },
-  { name: "Produkt 20", price: "11.00", image: "" },
-  { name: "Produkt 21", price: "11.50", image: "" },
-  { name: "Produkt 22", price: "12.00", image: "" },
-  { name: "Produkt 23", price: "12.50", image: "" },
-  { name: "Produkt 24", price: "13.00", image: "" },
-  
+
   { name: "Cuba Grape", price: "4.99", image: "Produkte/CGrape.jpeg" },
   { name: "Cuba Banana Hit", price: "4.99", image: "Produkte/CBananaHit.jpeg" },
   { name: "Cuba Cherry", price: "4.99", image: "Produkte/CCherry.jpeg" },
@@ -388,20 +382,6 @@ const products = [
   { name: "Cuba Watermelon", price: "4.99", image: "Produkte/CWatermelon.jpeg" },
   { name: "Cuba Forest Berries", price: "4.99", image: "Produkte/CForestBerries.jpeg" },
   { name: "Cuba Blueberry", price: "4.99", image: "Produkte/CBlueberry.jpeg" },
-  { name: "Produkt 35", price: "18.50", image: "" },
-  { name: "Produkt 36", price: "19.00", image: "" },
-  { name: "Produkt 37", price: "19.50", image: "" },
-  { name: "Produkt 38", price: "20.00", image: "" },
-  { name: "Produkt 39", price: "20.50", image: "" },
-  { name: "Produkt 40", price: "21.00", image: "" },
-  { name: "Produkt 41", price: "21.50", image: "" },
-  { name: "Produkt 42", price: "22.00", image: "" },
-  { name: "Produkt 43", price: "22.50", image: "" },
-  { name: "Produkt 44", price: "23.00", image: "" },
-  { name: "Produkt 45", price: "23.50", image: "" },
-  { name: "Produkt 46", price: "24.00", image: "" },
-  { name: "Produkt 47", price: "24.50", image: "" },
-  { name: "Produkt 48", price: "25.00", image: "" },
 
   { name: "Iceberg Strawberry Mango Gum", price: "4.99", image: "Produkte/ICStrawberryMangoGum.jpeg" },
   { name: "Iceberg Emerald", price: "4.99", image: "Produkte/ICEmerald.jpeg" },
@@ -419,12 +399,6 @@ const products = [
   { name: "Iceberg Guava Lime", price: "4.99", image: "Produkte/ICGuavaLime.jpeg" },
   { name: "Iceberg Arasaka", price: "4.99", image: "Produkte/ICArasaka.jpeg" },
   { name: "Iceberg Kiwi Strawberry", price: "4.99", image: "Produkte/ICKiwiStrawberry.jpeg" },
-  { name: "Produkt 65", price: "33.50", image: "" },
-  { name: "Produkt 66", price: "34.00", image: "" },
-  { name: "Produkt 67", price: "34.50", image: "" },
-  { name: "Produkt 68", price: "35.00", image: "" },
-  { name: "Produkt 69", price: "35.50", image: "" },
-  { name: "Produkt 70", price: "36.00", image: "" }
 ];
 
 for (let i = 1; i <= 70; i++) {
@@ -438,11 +412,15 @@ for (let i = 1; i <= 70; i++) {
 const shop = document.getElementById("shop");
 let index = 0;
 
+const rowSizes = [18, 10, 16]; // Pablo: 18, Cuba: 10, Iceberg: 16
+
 for (let layer = 0; layer < 3; layer++) {
     const row = document.createElement("div");
     row.className = "layer";
 
-    for (let i = 0; i < 24 && index < products.length; i++) {
+    const itemsInRow = rowSizes[layer];
+    
+    for (let i = 0; i < itemsInRow && index < products.length; i++) {
         const p = products[index];
 
         const div = document.createElement("div");
