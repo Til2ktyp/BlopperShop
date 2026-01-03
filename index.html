@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Shop</title>
+<style>
+body {
+    margin: 0;
+    padding: 24px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f6f7f9;
+    color: #111;
+}
+
+header {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.layer {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    margin-bottom: 32px;
+}
+
+.product {
+    min-width: 190px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+.product img {
+    width: 100%;
+    height: 130px;
+    background: linear-gradient(135deg, #e9ecf1, #dfe3ea);
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.product .name {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.product .price {
+    margin-top: 4px;
+    color: #555;
+}
+
+.product button {
+    margin-top: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+}
+
+.product button:hover {
+    background: #000;
+}
+
+#cartButton {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    border: none;
+    background: #111;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+</style>
+</head>
+<body>
+
+<header>BlopperShop</header>
+<h6>Einzigartig. Sicher. Snus.</h6>
+
+<div id="shop"></div>
+
+<button id="cartButton" onclick="toggleCart()">Warenkorb</button>
+
+<div id="cartWidget" style="position:fixed;top:0;right:-340px;width:320px;height:100%;background:#fff;border-left:1px solid #e5e7eb;padding:16px;transition:0.3s;overflow-y:auto;box-shadow:-10px 0 30px rgba(0,0,0,0.08);">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <h3>Warenkorb</h3>
+    <button onclick="toggleCart()" style="width:auto;">✕</button>
+  </div>
+  <div id="cartItems"></div>
+  <div id="cartTotal" style="margin-top:10px;font-weight:bold;"></div>
+  <input id="nameField" placeholder="Dein Name" style="margin-top:10px;width:100%;box-sizing:border-box;" />
+  <button onclick="checkout()" style="margin-top:10px;width:100%;">Bestellen</button>
+</div>
+
+<script>
+// Warenkorb (PRODUCT, COST)
+const cart = [];
+
+function addToCart(product, cost) {
+    cart.push({ product, cost });
+}
+
+function toggleCart() {
+    const w = document.getElementById("cartWidget");
+    w.style.right = w.style.right === "0px" ? "-320px" : "0px";
+    renderCart();
+}
+
+function renderCart() {
+    const box = document.getElementById("cartItems");
+    const totalBox = document.getElementById("cartTotal");
+    box.innerHTML = "";
+
+    let total = 0;
+
+    if (cart.length === 0) {
+        box.innerHTML = "<p>Leer</p>";
+        totalBox.textContent = "";
+        return;
+    }
+
+    cart.forEach((item, idx) => {
+        const div = document.createElement("div");
+        div.style.display = "grid";
+        div.style.gridTemplateColumns = "1fr auto auto";
+        div.style.gap = "8px";
+        div.style.alignItems = "center";
+
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = item.product;
+
+        const priceSpan = document.createElement("span");
+        priceSpan.textContent = item.cost + " €";
+        priceSpan.style.textAlign = "right";
+        priceSpan.style.color = "#555";
+
+        const btn = document.createElement("button");
+        btn.textContent = "✕";
+        btn.style.width = "auto";
+        btn.onclick = () => {
+            cart.splice(idx, 1);
+            renderCart();
+        };
+
+        div.appendChild(nameSpan);
+        div.appendChild(priceSpan);
+        div.appendChild(btn);
+        box.appendChild(div);
+        total += parseFloat(item.cost);
+    });
+
+    totalBox.textContent = `Endpreis: ${total.toFixed(2)} €`;
+}
+
+function checkout() {
+    if (cart.length === 0) return alert("Warenkorb ist leer");
+
+    let total = 0;
+    let products = [];
+    cart.forEach(i => {
+        total += parseFloat(i.cost);
+        products.push(i.product);
+    });
+
+    const summary = `Produkte: ${products.map((p, i) => `${p.padEnd(20, ' ')} ${cart[i].cost} €`).join("\n")} Endpreis: ${total.toFixed(2)} €`;
+    if (!confirm(summary + "\n\nBestätigen?")) return;
+
+    const name = document.getElementById("nameField").value;
+    if (!name) return alert("Name fehlt");
+
+    const message = `${name}; ${products.join(", ")}; ${total.toFixed(2)} €`;
+
+    fetch("https://ntfy.sh/snus2ktyp69420187", {
+        method: "POST",
+        body: message
+    });
+
+    alert("Bestellung abgeschickt");
+    cart.length = 0;
+    document.getElementById("nameField").value = "";
+    renderCart();
+}
+// Produktdaten – EINZELN EDITIERBAR
+// Hier kannst du JEDE Position separat ändern
+const products = [
+  { name: "Pablo Ice Cold",  price: "4.99", image: "Produkte/PIcecold.jpeg" },
+  { name: "Pablo Exclusive Pear",  price: "4.99", image: "Produkte/Pear.jpeg" },
+  { name: "Pablo Exclusive Kiwi",  price: "4.99", image: "Produkte/Kiwi.jpeg" },
+  { name: "Pablo Exclusive Orange",  price: "4.99", image: "Produkte/Orange.jpeg" },
+  { name: "Pablo Red",  price: "4.99", image: "Produkte/PRed.jpeg" },
+  { name: "Pablo Exclusive Strawberry Watermelon",  price: "4.99", image: "Produkte/StrawberryWatermelon.jpeg" },
+  { name: "Pablo Exclusive Lemonade",  price: "4.99", image: "Produkte/Lemonade.jpeg" },
+  { name: "Pablo Exclusive Sour Blueberries",  price: "4.99", image: "Produkte/Sourblueberry.jpeg" },
+  { name: "Pablo Exclusive Tropical Punch",  price: "4.99", image: "Produkte/TropicalPunch.jpeg" },
+  { name: "Pablo Exclusive Blue Raspberry", price: "4.99", image: "Produkte/BlueRaspberry.jpeg" },
+  { name: "Pablo Exclusive Passion Fruit", price: "4.99", image: "Produkte/PassionFruit.jpeg" },
+  { name: "Pablo Exclusive Frosted Mint", price: "4.99", image: "Produkte/FrostedMint.jpeg" },
+  { name: "Produkt 13", price: "7.50", image: "" },
+  { name: "Produkt 14", price: "8.00", image: "" },
+  { name: "Produkt 15", price: "8.50", image: "" },
+  { name: "Produkt 16", price: "9.00", image: "" },
+  { name: "Produkt 17", price: "9.50", image: "" },
+  { name: "Produkt 18", price: "10.00", image: "" },
+  { name: "Produkt 19", price: "10.50", image: "" },
+  { name: "Produkt 20", price: "11.00", image: "" },
+  { name: "Produkt 21", price: "11.50", image: "" },
+  { name: "Produkt 22", price: "12.00", image: "" },
+  { name: "Produkt 23", price: "12.50", image: "" },
+  { name: "Produkt 24", price: "13.00", image: "" },
+  
+  { name: "Cuba Grape", price: "4.99", image: "Produkte/CGrape.jpeg" },
+  { name: "Cuba Banana Hit", price: "4.99", image: "Produkte/CBananaHit.jpeg" },
+  { name: "Cuba Cherry", price: "4.99", image: "Produkte/CCherry.jpeg" },
+  { name: "Cuba Peach", price: "4.99", image: "Produkte/CPeach.jpeg" },
+  { name: "Cuba Black Currant", price: "4.99", image: "Produkte/CBlackCurrant.jpeg" },
+  { name: "Cuba Cola", price: "4.99", image: "Produkte/CCola.jpeg" },
+  { name: "Cuba Apple Juice", price: "4.99", image: "Produkte/CAppleJuice.jpeg" },
+  { name: "Cuba Watermelon", price: "4.99", image: "Produkte/CWatermelon.jpeg" },
+  { name: "Cuba Forest Berries", price: "4.99", image: "Produkte/CForestBerries.jpeg" },
+  { name: "Cuba Blueberry", price: "4.99", image: "Produkte/CBlueberry.jpeg" },
+  { name: "Produkt 35", price: "18.50", image: "" },
+  { name: "Produkt 36", price: "19.00", image: "" },
+  { name: "Produkt 37", price: "19.50", image: "" },
+  { name: "Produkt 38", price: "20.00", image: "" },
+  { name: "Produkt 39", price: "20.50", image: "" },
+  { name: "Produkt 40", price: "21.00", image: "" },
+  { name: "Produkt 41", price: "21.50", image: "" },
+  { name: "Produkt 42", price: "22.00", image: "" },
+  { name: "Produkt 43", price: "22.50", image: "" },
+  { name: "Produkt 44", price: "23.00", image: "" },
+  { name: "Produkt 45", price: "23.50", image: "" },
+  { name: "Produkt 46", price: "24.00", image: "" },
+  { name: "Produkt 47", price: "24.50", image: "" },
+  { name: "Produkt 48", price: "25.00", image: "" },
+
+  { name: "Iceberg Strawberry Mango Gum", price: "4.99", image: "Produkte/ICStrawberryMangoGum.jpeg" },
+  { name: "Iceberg Emerald", price: "4.99", image: "Produkte/ICEmerald.jpeg" },
+  { name: "Iceberg Crazy Mix", price: "4.99", image: "Produkte/ICCrazyMix.jpeg" },
+  { name: "Iceberg Cherry Apricot Gum", price: "4.99", image: "Produkte/ICCherryApricotGum.jpeg" },
+  { name: "Iceberg Dragon Fire", price: "4.99", image: "Produkte/ICDragonFire.jpeg" },
+  { name: "Iceberg Cola", price: "4.99", image: "Produkte/ICCola.jpeg" },
+  { name: "Iceberg Wild Berries", price: "4.99", image: "Produkte/ICWildBerries.jpeg" },
+  { name: "Iceberg Strawberry Pomegranate", price: "4.99", image: "Produkte/ICStrawberryPomegranate.jpeg" },
+  { name: "Iceberg Apple Lemon Pineapple", price: "4.99", image: "Produkte/ICAppleLemonPineapple.jpeg" },
+  { name: "Iceberg Mango Banana", price: "30.00", image: "Produkte/ICMangoBanana.jpeg" },
+  { name: "Iceberg Melon Peach", price: "4.99", image: "Produkte/ICMelonPeach.jpeg" },
+  { name: "Iceberg Grape", price: "4.99", image: "Produkte/ICGrape.jpeg" },
+  { name: "Iceberg Sour Berries", price: "4.99", image: "Produkte/ICSourBerries.jpeg" },
+  { name: "Iceberg Guava Lime", price: "4.99", image: "Produkte/ICGuavaLime.jpeg" },
+  { name: "Iceberg Arasaka", price: "4.99", image: "Produkte/ICArasaka.jpeg" },
+  { name: "Iceberg Kiwi Strawberry", price: "4.99", image: "Produkte/ICKiwiStrawberry.jpeg" },
+  { name: "Produkt 65", price: "33.50", image: "" },
+  { name: "Produkt 66", price: "34.00", image: "" },
+  { name: "Produkt 67", price: "34.50", image: "" },
+  { name: "Produkt 68", price: "35.00", image: "" },
+  { name: "Produkt 69", price: "35.50", image: "" },
+  { name: "Produkt 70", price: "36.00", image: "" }
+];
+for (let i = 1; i <= 70; i++) {
+    products.push({
+        name: "Produkt " + i,
+        price: (i * 1.5).toFixed(2),
+        image: ""
+    });
+}
+
+// Rendering
+const shop = document.getElementById("shop");
+let index = 0;
+
+for (let layer = 0; layer < 3; layer++) {
+    const row = document.createElement("div");
+    row.className = "layer";
+
+    for (let i = 0; i < 24 && index < products.length; i++) {
+        const p = products[index];
+
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+            <img src="${p.image}">
+            <div class="name">${p.name}</div>
+            <div class="price">${p.price} €</div>
+            <button onclick="addToCart('${p.name}', '${p.price}')">
+                In den Warenkorb
+            </button>
+        `;
+
+        row.appendChild(div);
+        index++;
+    }
+
+    shop.appendChild(row);
+}
+</script>
+<H5>© Blopperbold GMBH und Co.KG. Alle Rechte vorbehalten.</H5>
+<H6>Diese Seite ist nur eine Überleitungsstelle, keine Bestellungen werden von uns gehandelt.</H6>
+</body>
+</html>
